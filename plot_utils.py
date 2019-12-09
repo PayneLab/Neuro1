@@ -48,6 +48,8 @@ def reproducibility(data, pair=None):
         num_channels = len(data.columns.values)
         channels = data.columns.values
         
+    if num_channels == 2: num_channels = 1
+        
     fig, (axs) = plt.subplots(nrows=num_channels, ncols=num_channels)
     scs = []
     annots = []
@@ -55,8 +57,9 @@ def reproducibility(data, pair=None):
     for i_label, i in zip(channels, range(0,num_channels)):
         scs.append([])
         annots.append([])
+        i_data = data[i_label]
+        if num_channels == 1: channels = channels[i+1:]
         for j_label, j in zip(channels, range(0,num_channels)):
-            i_data = data[i_label]
             j_data = data[j_label]
             points = ([],[],[])#these will represent proteins
             #axs[i][j].set_title("{0} \nvs {1}".format(i_label,j_label))
@@ -64,27 +67,40 @@ def reproducibility(data, pair=None):
             for protein in i_data.index:
                  if protein in j_data.index:
                     #here we match proteins from each set
-                    points[0].append(i_data[protein])
-                    points[1].append(j_data[protein])
+                    points[0].append(j_data[protein])
+                    points[1].append(i_data[protein])
                     points[2].append(protein)
-            sc = axs[i][j].scatter(points[0],points[1])
+            if num_channels > 1: #If we are graphing multiple
+                ax = axs[i][j]
+                ax.axis('equal')
+                #only hide ticks if we are graphing multiple
+                ax.set_xticks(ticks=[])#hides ticks
+                ax.set_yticks(ticks=[])#hides ticks
+                #If these are the edge graphs
+                if j == 0: ax.set_ylabel(i_label, rotation=45,horizontalalignment='right')
+                if i == num_channels-1: ax.set_xlabel(j_label, rotation=45)
+            else: ax = axs
+            sc = ax.scatter(points[0],points[1])
             scs[i].append(sc)
             
-            annot = axs[i][j].annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points", bbox=dict(boxstyle="round", fc="w"), arrowprops=dict(arrowstyle="->"))
+            annot = ax.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points", bbox=dict(boxstyle="round", fc="w"), arrowprops=dict(arrowstyle="->"))
             annot.set_visible(False)
             annots[i].append(annot)
             
     def update_annot(ind, annot, sc):
         pos = sc.get_offsets()[ind["ind"][0]]
         annot.xy = pos
-        text = "{}".format(" ".join([points[2][n] for n in ind["ind"]]))
+        text = "{}".format("/n".join([points[2][n] for n in ind["ind"]]))
         annot.set_text(text)
         annot.get_bbox_patch().set_alpha(0.4)
 
     def hover(event):
         for i in range(0,num_channels):
             for j in range(0,num_channels):
-                 if event.inaxes == axs[i][j]:
+                if num_channels > 1:
+                    ax = axs[i][j]
+                else: ax = axs
+                if event.inaxes == ax:
                     cont, ind = scs[i][j].contains(event)
                     if cont:
                         update_annot(ind, annots[i][j], scs[i][j])
@@ -98,5 +114,6 @@ def reproducibility(data, pair=None):
     
     fig.set_figheight(2*num_channels)
     fig.set_figwidth(2*num_channels)
-    plt.tight_layout()
+    #plt.tight_layout()
+    plt.show()
 
