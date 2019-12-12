@@ -3,7 +3,7 @@ import requests
 import getpass
 import bs4
 
-def download_file(download_to_path, url_file_path, password_file_path):
+def download_file(download_to_path="data/datafile", url_file_path="data/url.txt", password_file_path="data/password.txt"):
     """Download a file from a given url to the specified location.
 
     Parameters:
@@ -14,13 +14,15 @@ def download_file(download_to_path, url_file_path, password_file_path):
     """
 
     # import pdb; pdb.set_trace()
+    url_file = open(url_file_path, 'r')
+    url = url_file.read().strip()
+    url_file.close()
+
     password_file = open(password_file_path, 'r')
     password = password_file.read().strip()
     password_file.close()
 
-    url_file = open(url_file_path, 'r')
-    url = url_file.read().strip()
-    url_file.close()
+
 
     for i in range(2):
 
