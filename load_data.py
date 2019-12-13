@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import pandas as pd
 import requests
-import getpass
 import bs4
 
 # Basic data loader functions for a dataframe from a file
