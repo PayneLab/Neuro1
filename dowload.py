@@ -13,7 +13,7 @@ def download_file(download_to_path="data/datafile", url_file_path="data/url.txt"
     str: The path the file was downloaded to.
     """
 
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     url_file = open(url_file_path, 'r')
     url = url_file.read().strip()
     url_file.close()

@@ -20,7 +20,7 @@ def download_file(download_to_path="data/datafile", url_file_path="data/url.txt"
     str: The path the file was downloaded to.
     """
 
-    # import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     url_file = open(url_file_path, 'r')
     url = url_file.read().strip()
     url_file.close()
@@ -109,6 +109,7 @@ def load_dataset(file=None, usecols=None, prefix='Abundance:',
     #        that do not contain 'count' or 'corrected' and use the 'Protein IDs'
     #        column as the indecies. These will be the raw intensity values.
 
+    #import pdb; pdb.set_trace()
     file = download_file()
     if not file:
         #If no file is named, it will open a filedialog
