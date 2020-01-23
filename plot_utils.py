@@ -105,7 +105,6 @@ def reproducibility(data, pair=None):
         text = "{}".format("/n".join([points[2][n] for n in ind["ind"]]))
         annot.set_text(text)
         annot.get_bbox_patch().set_alpha(0.4)
-        #print ("The thing updated.")
 
     def hover(event):
         for i in range(0,num_graph_rows):
