@@ -63,7 +63,6 @@ def reproducibility(data, pair=None):
         for j_label, j in zip(channels, range(0,num_graph_rows)):
             j_data = data[j_label]
             points = ([],[],[])#these will represent proteins
-            #axs[i][j].set_title("{0} \nvs {1}".format(i_label,j_label))
 
             for protein in i_data.index:
                  if protein in j_data.index:
@@ -80,10 +79,10 @@ def reproducibility(data, pair=None):
                 if j == 0: ax.set_ylabel(i_label, rotation=45,horizontalalignment='right')
                 if i == num_graph_rows-1: ax.set_xlabel(j_label, rotation=45,horizontalalignment='right')
             else:
-                ax = axs
+                #if only two are being compared, the labels are oriented normally
+                ax = axs #psuedonym for consistency with multiple graphs
                 ax.set_ylabel(i_label)
                 ax.set_xlabel(j_label)
-
 
             sc = ax.scatter(points[0],points[1])
 
@@ -94,7 +93,9 @@ def reproducibility(data, pair=None):
             ax.set_xlim(-1, limit)
             scs[i].append(sc)
 
-            annot = ax.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points", bbox=dict(boxstyle="round", fc="w"),arrowprops=dict(arrowstyle="->"))
+            annot = ax.annotate("", xy=(0,0), xytext=(20,20),
+                    textcoords="offset points", bbox=dict(boxstyle="round", fc="w"),
+                    arrowprops=dict(arrowstyle="->"))
             annot.set_visible(False)
             annots[i].append(annot)
 
@@ -104,7 +105,7 @@ def reproducibility(data, pair=None):
         text = "{}".format("/n".join([points[2][n] for n in ind["ind"]]))
         annot.set_text(text)
         annot.get_bbox_patch().set_alpha(0.4)
-        return ("The thing updated.")
+        #print ("The thing updated.")
 
     def hover(event):
         for i in range(0,num_graph_rows):
