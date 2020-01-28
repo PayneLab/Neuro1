@@ -40,7 +40,7 @@ def n_thresholds(alist, percents=[95], display=True):
 
     return r
 
-def reproducibility(data, pair=None):
+def reproducibility(data, pair=None, logging=True):
     if pair:
         num_channels = len(pair)
         channels = pair
@@ -71,6 +71,7 @@ def reproducibility(data, pair=None):
                     points[0].append(j_data[protein])
                     points[1].append(i_data[protein])
                     points[2].append(protein)
+
             if num_graph_rows > 1: #If we are graphing multiple
                 ax = axs[i][j]
                 #only hide ticks if we are graphing multiple
@@ -89,9 +90,11 @@ def reproducibility(data, pair=None):
 
             #forces the scales equal
             plt.gca().set_aspect('equal', adjustable='box')
-            limit = max(ax.get_ylim()[1],ax.get_xlim()[1])
-            ax.set_ylim(-1, limit)
-            ax.set_xlim(-1, limit)
+            limit = max(ax.get_ylim()[1],ax.get_xlim()[1]) *1.001# add a small buffer
+            if logging: min_limit = 90
+            #elif not logging: min_limit = -1
+            ax.set_ylim(min_limit, limit)
+            ax.set_xlim(min_limit, limit)
             scs[i].append(sc)
 
             annot = ax.annotate("", xy=(0,0), xytext=(20,20),
@@ -99,6 +102,15 @@ def reproducibility(data, pair=None):
                     arrowprops=dict(arrowstyle="->"))
             annot.set_visible(False)
             annots[i].append(annot)
+
+            if logging:
+                ax.set_yscale('log')
+                ax.set_xscale('log')
+
+            if num_graph_rows > 1:
+                #only hide ticks if we are graphing multiple
+                ax.set_xticks(ticks=[])#hides ticks
+                ax.set_yticks(ticks=[])#hides ticks
 
     def update_annot(ind, annot, sc):
         pos = sc.get_offsets()[ind["ind"][0]]
