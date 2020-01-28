@@ -51,6 +51,7 @@ def reproducibility(data, pair=None):
     if num_channels == 2: num_graph_rows = 1
     else: num_graph_rows = num_channels
 
+    plt.rcParams['figure.dpi'] = 200
     fig, (axs) = plt.subplots(nrows=num_graph_rows, ncols=num_graph_rows)
     scs = []
     annots = []
@@ -115,8 +116,8 @@ def reproducibility(data, pair=None):
                 if event.inaxes == ax:
                     cont, ind = scs[i][j].contains(event)
                     if cont:
-                        update_annot(ind, annots[i][j], scs[i][j])
                         annots[i][j].set_visible(True)
+                        update_annot(ind, annots[i][j], scs[i][j])
                         fig.canvas.draw_idle()
                     else:
                         if annots[i][j].get_visible():
