@@ -40,13 +40,26 @@ def n_thresholds(alist, percents=[95], display=True):
 
     return r
 
-def reproducibility(data, pair=None, logging=True):
+def reproducibility(data, pair=None, logging=True, show_only=[]):
+    #Plots points from a dataframe against two columns
+    #    for example, the proteins in sample 1 against sample 2
+    #
+    #  data: a pandas dataframe
+    #  pair: a list of two (or more) to graph;
+    #    defaults to None, which graphs all columns
+    #  logging: whether the data should be graphed on a log-scale
+    #  show_only: a list of points to show; a subset from data
+    #  color_subset=(color, list)
+
     if pair:
         num_channels = len(pair)
         channels = pair
     else:
         num_channels = len(data.columns.values)
         channels = data.columns.values
+
+    if show_only != []:
+        data=data.loc[show_only]
 
     if num_channels == 2: num_graph_rows = 1
     else: num_graph_rows = num_channels
