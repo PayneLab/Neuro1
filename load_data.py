@@ -2,6 +2,7 @@
 import pandas as pd
 import requests
 import bs4
+import numpy as np
 
 # Basic data loader functions for a dataframe from a file
 #    using some or all columns.
@@ -10,7 +11,7 @@ import bs4
 #    https://github.com/PayneLab/SingleCellTMTQualityControl
 
 
-def download_file(download_to_path="data/datafile", url_file_path="data/url.txt", password_file_path="data/password.txt"):
+def download_file(download_to_path="data/datafile.txt", url_file_path="data/url.txt", password_file_path="data/password.txt"):
     """Download a file from a given url to the specified location.
 
     Parameters:
@@ -110,7 +111,8 @@ def load_dataset(file=None, usecols=None, prefix='Abundance:',
     #        column as the indecies. These will be the raw intensity values.
 
     #import pdb; pdb.set_trace()
-    file = download_file()
+    if not file: 
+        file = download_file()
     if not file:
         #If no file is named, it will open a filedialog
         file=find_file()
