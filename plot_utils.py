@@ -257,8 +257,9 @@ def graph_by_variance(data, cell_types = ["Inter","Motor"],
     plt.rc('ytick', labelsize=25)
     
     fig= plt.figure(figsize=(24,16))
+    plt.yscale('log')
     
-    plt.title("Log 2 Fold Changes")
+    plt.title("Fold Changes")
     
     log2_fold_changes = [math.log2(x) for x in fold_changes.values()]
     plt.scatter(log2_fold_changes, variances.values())
@@ -268,7 +269,7 @@ def graph_by_variance(data, cell_types = ["Inter","Motor"],
     if threshold99 != None:
         plt.axhline(y=threshold99, color='b', linestyle='-',alpha=.5)
     plt.gca().invert_yaxis()
-    plt.xlabel("Log2 Fold Change")
+    plt.xlabel("Log2(S1/S2)")
     plt.ylabel("Technical Variance")
     plt.show()
 
@@ -302,7 +303,8 @@ def get_altered(data, cell_types = ["Inter","Motor"],
     
     variances_sorted = sorted(variances.values(), reverse=True)
     variances_for_thresh = [x for x in variances_sorted if x !=0]
-    threshold = float(variances_sorted[math.ceil(float(len(variances_for_thresh))*((100.0-VAR_THRES)/100.0))])
+    threshold = float(variances_sorted[math.ceil(float(len(variances_sorted))*(.05))])
+    #print (threshold)
     
     sig_proteins = []
     for key in fd.index:
